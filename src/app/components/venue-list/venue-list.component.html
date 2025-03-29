@@ -1,0 +1,21 @@
+<div class="venue-list-container">
+  <h1>Available Venues</h1>
+  <div class="venues-grid">
+    <div class="venue-card" *ngFor="let venue of venues" [routerLink]="['/venue', venue.id]">
+      <div class="venue-image">
+        <img [src]="venue.imageUrl" [alt]="venue.name">
+      </div>
+      <div class="venue-info">
+        <h2>{{ venue.name }}</h2>
+        <p class="description">{{ venue.description }}</p>
+        <div class="venue-details">
+          <span class="capacity">Capacity: {{ venue.capacity }} people</span>
+          <span class="price">${{ venue.pricePerHour }}/hour</span>
+        </div>
+        <div class="amenities">
+          <span class="amenity-tag" *ngFor="let amenity of venue.amenities">{{ amenity }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

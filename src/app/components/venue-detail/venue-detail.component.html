@@ -1,0 +1,35 @@
+<div class="venue-detail" *ngIf="venue">
+  <div class="venue-header">
+    <img [src]="venue.imageUrl" [alt]="venue.name" class="venue-image">
+    <div class="venue-info">
+      <h1>{{ venue.name }}</h1>
+      <p class="description">{{ venue.description }}</p>
+      <div class="key-details">
+        <span><i class="fas fa-users"></i> Capacity: {{ venue.capacity }} guests</span>
+        <span><i class="fas fa-dollar-sign"></i> ${{ venue.pricePerHour }}/hour</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="amenities-section">
+    <h2>Amenities</h2>
+    <div class="amenities-grid">
+      <div class="amenity-item" *ngFor="let amenity of venue.amenities">
+        <i class="fas fa-check"></i>
+        <span>{{ amenity }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-section">
+    <button class="book-now-btn" (click)="proceedToBooking()">
+      Book Now
+    </button>
+  </div>
+</div>
+
+<div class="loading" *ngIf="!venue">
+  <div class="spinner"></div>
+  <p>Loading venue details...</p>
+</div>
+

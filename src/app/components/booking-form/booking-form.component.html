@@ -1,0 +1,158 @@
+<div class="booking-form-container">
+  <div class="form-header">
+    <h2>Book {{ venue?.name }}</h2>
+    <p class="subtitle">Fill in your details to complete the booking</p>
+  </div>
+
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        [class.is-invalid]="formControls['name'].invalid && formControls['name'].touched"
+        placeholder="Enter your full name"
+      >
+      <div class="error-message" *ngIf="formControls['name'].invalid && formControls['name'].touched">
+        Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        [class.is-invalid]="formControls['email'].invalid && formControls['email'].touched"
+        placeholder="Enter your email"
+      >
+      <div class="error-message" *ngIf="formControls['email'].invalid && formControls['email'].touched">
+        Please enter a valid email
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input
+        type="tel"
+        id="phone"
+        formControlName="phone"
+        [class.is-invalid]="formControls['phone'].invalid && formControls['phone'].touched"
+        placeholder="Enter your phone number"
+      >
+      <div class="error-message" *ngIf="formControls['phone'].invalid && formControls['phone'].touched">
+        Phone number is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input
+        type="date"
+        id="date"
+        formControlName="date"
+        [class.is-invalid]="formControls['date'].invalid && formControls['date'].touched"
+        [min]="getMinDate()"
+      >
+      <div class="error-message" *ngIf="formControls['date'].invalid && formControls['date'].touched">
+        Date is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="startTime">Start Time</label>
+      <select
+        id="startTime"
+        formControlName="startTime"
+        [class.is-invalid]="formControls['startTime'].invalid && formControls['startTime'].touched"
+        (change)="onTimeChange()"
+      >
+        <option value="">Select start time</option>
+        <option *ngFor="let time of availableTimeSlots" [value]="time">
+          {{ time }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="formControls['startTime'].invalid && formControls['startTime'].touched">
+        Start time is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="endTime">End Time</label>
+      <select
+        id="endTime"
+        formControlName="endTime"
+        [class.is-invalid]="formControls['endTime'].invalid && formControls['endTime'].touched"
+        (change)="onTimeChange()"
+      >
+        <option value="">Select end time</option>
+        <option *ngFor="let time of availableTimeSlots" [value]="time">
+          {{ time }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="formControls['endTime'].invalid && formControls['endTime'].touched">
+        End time is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="numberOfGuests">Number of Guests</label>
+      <input
+        type="number"
+        id="numberOfGuests"
+        formControlName="numberOfGuests"
+        [class.is-invalid]="formControls['numberOfGuests'].invalid && formControls['numberOfGuests'].touched"
+        [min]="1"
+        [max]="venue?.capacity || 100"
+        placeholder="Enter number of guests"
+      >
+      <div class="error-message" *ngIf="formControls['numberOfGuests'].invalid && formControls['numberOfGuests'].touched">
+        Please enter a valid number of guests (1-{{ venue?.capacity || 100 }})
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="specialRequests">Special Requests</label>
+      <textarea
+        id="specialRequests"
+        formControlName="specialRequests"
+        placeholder="Any special requests or requirements?"
+      ></textarea>
+    </div>
+
+    <div class="price-summary" *ngIf="totalPrice > 0">
+      <h3>Price Summary</h3>
+      <div class="price-details">
+        <div class="price-row">
+          <span>Selected Time:</span>
+          <span>{{ formControls['startTime'].value }} - {{ formControls['endTime'].value }}</span>
+        </div>
+        <div class="price-row">
+          <span>Rate:</span>
+          <span>${{ venue?.pricePerHour }}/hour</span>
+        </div>
+        <div class="price-row total">
+          <span>Total Price:</span>
+          <span>${{ totalPrice }}</span>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" [disabled]="!bookingForm.valid">
+      Confirm Booking
+    </button>
+  </form>
+
+  <div class="success-message" *ngIf="submitted">
+    <i class="fas fa-check-circle"></i>
+    <h3>Booking Successful!</h3>
+    <p>Your booking has been confirmed. You will be redirected shortly...</p>
+  </div>
+
+  <div class="loading" *ngIf="!venue && !submitted">
+    <div class="spinner"></div>
+    <p>Loading venue details...</p>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="my-bookings">
+  <div class="bookings-header">
+    <h1>My Bookings</h1>
+  </div>
+
+  <div class="bookings-list">
+    <div *ngIf="bookings.length === 0" class="no-bookings">
+      <p>You don't have any bookings yet.</p>
+      <a routerLink="/" class="browse-venues-btn">Browse Venues</a>
+    </div>
+
+    <div *ngFor="let booking of bookings" class="booking-card">
+      <div class="booking-info">
+        <h3>{{ booking.venueName }}</h3>
+        <div class="booking-details">
+          <div class="detail-item">
+            <i class="fas fa-calendar"></i>
+            <span>{{ booking.date | date:'mediumDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-clock"></i>
+            <span>{{ booking.startTime }} - {{ booking.endTime }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-dollar-sign"></i>
+            <span>${{ booking.totalPrice }}</span>
+          </div>
+        </div>
+        <div class="booking-status" [ngClass]="getStatusClass(booking.status)">
+          {{ getStatusText(booking.status) }}
+        </div>
+      </div>
+
+      <div class="booking-actions">
+        <button 
+          *ngIf="booking.status !== 'cancelled'"
+          class="cancel-btn"
+          (click)="cancelBooking(booking.id)">
+          Cancel Booking
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,126 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <button class="add-venue-btn" (click)="showForm = !showForm">
+      {{ showForm ? 'Cancel' : 'Add New Venue' }}
+    </button>
+  </div>
+
+  <div class="venue-form" *ngIf="showForm">
+    <h2>Add New Venue</h2>
+    <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Venue Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          formControlName="name" 
+          class="form-control"
+          [class.is-invalid]="venueForm.get('name')?.invalid && venueForm.get('name')?.touched"
+        >
+        <div class="invalid-feedback" *ngIf="venueForm.get('name')?.invalid && venueForm.get('name')?.touched">
+          Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea 
+          id="description" 
+          formControlName="description" 
+          class="form-control"
+          [class.is-invalid]="venueForm.get('description')?.invalid && venueForm.get('description')?.touched"
+        ></textarea>
+        <div class="invalid-feedback" *ngIf="venueForm.get('description')?.invalid && venueForm.get('description')?.touched">
+          Description is required
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="capacity">Capacity</label>
+          <input 
+            type="number" 
+            id="capacity" 
+            formControlName="capacity" 
+            class="form-control"
+            [class.is-invalid]="venueForm.get('capacity')?.invalid && venueForm.get('capacity')?.touched"
+          >
+          <div class="invalid-feedback" *ngIf="venueForm.get('capacity')?.invalid && venueForm.get('capacity')?.touched">
+            Valid capacity is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="pricePerHour">Price per Hour</label>
+          <input 
+            type="number" 
+            id="pricePerHour" 
+            formControlName="pricePerHour" 
+            class="form-control"
+            [class.is-invalid]="venueForm.get('pricePerHour')?.invalid && venueForm.get('pricePerHour')?.touched"
+          >
+          <div class="invalid-feedback" *ngIf="venueForm.get('pricePerHour')?.invalid && venueForm.get('pricePerHour')?.touched">
+            Valid price is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input 
+          type="url" 
+          id="imageUrl" 
+          formControlName="imageUrl" 
+          class="form-control"
+          [class.is-invalid]="venueForm.get('imageUrl')?.invalid && venueForm.get('imageUrl')?.touched"
+        >
+        <div class="invalid-feedback" *ngIf="venueForm.get('imageUrl')?.invalid && venueForm.get('imageUrl')?.touched">
+          Valid image URL is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="amenities">Amenities (comma-separated)</label>
+        <input 
+          type="text" 
+          id="amenities" 
+          formControlName="amenities" 
+          class="form-control"
+          placeholder="e.g., Parking, WiFi, Projector"
+          [class.is-invalid]="venueForm.get('amenities')?.invalid && venueForm.get('amenities')?.touched"
+        >
+        <div class="invalid-feedback" *ngIf="venueForm.get('amenities')?.invalid && venueForm.get('amenities')?.touched">
+          Amenities are required
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="venueForm.invalid">
+        Add Venue
+      </button>
+    </form>
+  </div>
+
+  <div class="venues-list">
+    <h2>Manage Venues</h2>
+    <div class="venues-grid">
+      <div class="venue-card" *ngFor="let venue of venues">
+        <img [src]="venue.imageUrl" [alt]="venue.name" class="venue-image">
+        <div class="venue-info">
+          <h3>{{ venue.name }}</h3>
+          <p>{{ venue.description }}</p>
+          <div class="venue-details">
+            <span>Capacity: {{ venue.capacity }}</span>
+            <span>Price: ${{ venue.pricePerHour }}/hour</span>
+          </div>
+          <div class="amenities">
+            <span class="amenity-tag" *ngFor="let amenity of venue.amenities">
+              {{ amenity }}
+            </span>
+          </div>
+        </div>
+        <button class="delete-btn" (click)="deleteVenue(venue.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div> 
